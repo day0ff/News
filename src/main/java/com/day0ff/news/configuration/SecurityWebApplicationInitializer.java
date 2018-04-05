@@ -1,4 +1,4 @@
-package com.day0ff.news.security;
+package com.day0ff.news.configuration;
 
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 

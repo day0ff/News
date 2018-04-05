@@ -22,10 +22,6 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 	private TokenStore tokenStore;
 
 	@Autowired
-	private UserApprovalHandler userApprovalHandler;
-
-	@Autowired
-	@Qualifier("authenticationManagerBean")
 	private AuthenticationManager authenticationManager;
 
 	@Override
@@ -37,19 +33,13 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
             .authorities("ROLE_CLIENT", "ROLE_TRUSTED_CLIENT")
             .scopes("read", "write", "trust")
             .secret("secret")
-            .accessTokenValiditySeconds(60).//Access token is only valid for 2 minutes.
+            .accessTokenValiditySeconds(120).//Access token is only valid for 2 minutes.
             refreshTokenValiditySeconds(600);//Refresh token is only valid for 10 minutes.
 	}
 
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-		endpoints.tokenStore(tokenStore).userApprovalHandler(userApprovalHandler)
+		endpoints.tokenStore(tokenStore)
 				.authenticationManager(authenticationManager);
 	}
-
-	@Override
-	public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
-		oauthServer.realm(REALM+"/client");
-	}
-
 }

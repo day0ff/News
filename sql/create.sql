@@ -4,7 +4,7 @@ CREATE TABLE users(
   enabled BOOLEAN NOT NULL DEFAULT true
 );
 CREATE TABLE user_roles(
-  	user_role_id SERIAL PRIMARY KEY,
+  	id SERIAL PRIMARY KEY,
   	user_name varchar(45) NOT NULL REFERENCES users (user_name),
   	role varchar(45) NOT NULL,
 	CONSTRAINT uni_username_role UNIQUE (role, user_name)

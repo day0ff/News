@@ -1,6 +1,10 @@
 package com.day0ff.news.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users",
@@ -16,6 +20,10 @@ public class Users {
 
     @Column(name = "enabled")
     private Boolean enabled;
+
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
+    private List<UserRoles> userRolesList = new ArrayList<>();
 
     public Users() {
     }
@@ -50,12 +58,21 @@ public class Users {
         this.enabled = enabled;
     }
 
+    public List<UserRoles> getUserRolesList() {
+        return userRolesList;
+    }
+
+    public void setUserRolesList(List<UserRoles> userRolesList) {
+        this.userRolesList = userRolesList;
+    }
+
     @Override
     public String toString() {
         return "Users{" +
                 "userName='" + userName + '\'' +
                 ", password='" + password + '\'' +
                 ", enabled=" + enabled +
+                ", userRolesList=" + userRolesList +
                 '}';
     }
 }
