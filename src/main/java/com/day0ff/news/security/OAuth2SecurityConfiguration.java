@@ -23,7 +23,7 @@ import java.util.Properties;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    @Resource(name = "usersServiceImpl")
+    @Resource(name = "userDetailsImpl")
     private UserDetailsService userDetailsService;
 
     @Override
@@ -35,10 +35,6 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired
     public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.inMemoryAuthentication()
-//        .withUser("denis").password("1234").roles("ADMIN").and()
-//        .withUser("bob").password("1234").roles("ADMIN");
-//		auth.userDetailsService(inMemoryUserDetailsManager());
         auth.userDetailsService(userDetailsService);
     }
 

@@ -1,9 +1,11 @@
 package com.day0ff.news.service.impl;
 
 import com.day0ff.news.entity.UserRoles;
+import com.day0ff.news.entity.Users;
 import com.day0ff.news.repository.UserRolesRepository;
 import com.day0ff.news.service.UserRolesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
