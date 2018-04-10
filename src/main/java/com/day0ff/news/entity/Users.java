@@ -12,6 +12,10 @@ import java.util.List;
 )
 public class Users {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", columnDefinition = "serial")
+    private Long id;
+
     @Column(name = "user_name")
     private String userName;
 
@@ -21,9 +25,14 @@ public class Users {
     @Column(name = "enabled")
     private Boolean enabled;
 
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
-    private List<UserRoles> userRolesList = new ArrayList<>();
+    private List<Roles> roles = new ArrayList<>();
 
     public Users() {
     }
@@ -32,6 +41,14 @@ public class Users {
         this.userName = userName;
         this.password = password;
         this.enabled = enabled;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUserName() {
@@ -58,21 +75,22 @@ public class Users {
         this.enabled = enabled;
     }
 
-    public List<UserRoles> getUserRolesList() {
-        return userRolesList;
+    public List<Roles> getRoles() {
+        return roles;
     }
 
-    public void setUserRolesList(List<UserRoles> userRolesList) {
-        this.userRolesList = userRolesList;
+    public void setRoles(List<Roles> roles) {
+        this.roles = roles;
     }
 
     @Override
     public String toString() {
         return "Users{" +
-                "userName='" + userName + '\'' +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
                 ", password='" + password + '\'' +
                 ", enabled=" + enabled +
-                ", userRolesList=" + userRolesList +
+                ", roles=" + roles +
                 '}';
     }
 }

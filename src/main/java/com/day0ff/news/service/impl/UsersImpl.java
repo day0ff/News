@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Service(value = "usersServiceImpl")
+@Service
 public class UsersImpl implements UsersService {
     @Autowired
     private UsersRepository usersRepository;
@@ -31,4 +31,9 @@ public class UsersImpl implements UsersService {
         return usersRepository.findByUserName(userName);
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public Users findById(Long id) {
+        return usersRepository.findById(id);
+    }
 }
