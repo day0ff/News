@@ -26,7 +26,7 @@ CREATE TABLE persons(
 	first_name VARCHAR(100) NOT NULL,
 	last_name VARCHAR(100) NOT NULL,
 	screen_name VARCHAR(100) NOT NULL,
-	image VARCHAR(255) DEFAULT 'image'
+	image VARCHAR(255) DEFAULT 'hamster.png'
 );
 
 CREATE TABLE tags(
@@ -40,7 +40,7 @@ CREATE TABLE news(
 	title TEXT NOT NULL,
 	article TEXT NOT NULL,
 	post TEXT NOT NULL,
-	image VARCHAR(255) DEFAULT 'image',
+	image VARCHAR(255) DEFAULT 'news_paper.png',
 	publication_date DATE NOT NULL,
 	views INT DEFAULT 0,
 	likes INT DEFAULT 0,

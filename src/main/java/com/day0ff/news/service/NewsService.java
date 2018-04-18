@@ -8,4 +8,5 @@ public interface NewsService {
     List<News> findAll();
     News findById(Long id);
     News fetchFindById(Long id);
+    List<News> fetchNewsFindByPersonId(Long id);
 }

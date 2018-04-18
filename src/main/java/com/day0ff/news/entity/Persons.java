@@ -109,7 +109,7 @@ public class Persons {
     public String toString() {
         return "Persons{" +
                 "id=" + id +
-                ", user=" + user +
+                ", user=" + user.getUserName() +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", screenName='" + screenName + '\'' +

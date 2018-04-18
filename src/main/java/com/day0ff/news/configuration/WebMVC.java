@@ -29,7 +29,7 @@ public class WebMVC extends WebMvcConfigurerAdapter {
         converters.add(converter);
     }
 
-/*    @Override
+    @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("*").addResourceLocations("");
     }
@@ -38,7 +38,8 @@ public class WebMVC extends WebMvcConfigurerAdapter {
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("forward:/index.html");
         registry.addViewController("/home*").setViewName("forward:/index.html");
-        registry.addViewController("/login*").setViewName("forward:/index.html");
-        registry.addViewController("/users*").setViewName("forward:/index.html");
-    }*/
+        registry.addViewController("/person/detail*").setViewName("forward:/index.html");
+        registry.addViewController("/persons*").setViewName("forward:/index.html");
+        registry.addViewController("/registration*").setViewName("forward:/index.html");
+    }
 }

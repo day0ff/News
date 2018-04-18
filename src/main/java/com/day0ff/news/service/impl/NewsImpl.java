@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class NewsImpl implements NewsService{
+public class NewsImpl implements NewsService {
     @Autowired
     private NewsRepository newsRepository;
 
@@ -26,5 +26,10 @@ public class NewsImpl implements NewsService{
     @Override
     public News fetchFindById(Long id) {
         return newsRepository.fetchNewsFindById(id);
+    }
+
+    @Override
+    public List<News> fetchNewsFindByPersonId(Long id) {
+        return newsRepository.fetchNewsFindByPersonId(id);
     }
 }

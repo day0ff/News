@@ -22,4 +22,14 @@ public class PersonsImpl implements PersonsService{
     public List<Persons> findAll() {
         return personsRepository.findAll();
     }
+
+    @Override
+    public Persons findByName(String name) {
+        return personsRepository.findByUserName(name);
+    }
+
+    @Override
+    public Persons findByNameAndPassword(String userName, String password) {
+        return personsRepository.findByUserNameAndPassword(userName, password);
+    }
 }
