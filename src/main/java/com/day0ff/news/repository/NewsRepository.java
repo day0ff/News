@@ -16,4 +16,7 @@ public interface NewsRepository extends JpaRepository<News, Long> {
 
     @Query("SELECT n FROM News n JOIN FETCH n.person p WHERE p.id = ?1")
     List<News> fetchNewsFindByPersonId(Long id);
+
+    @Query("SELECT COUNT(n.person.id) FROM News n WHERE n.person.id = ?1")
+    int fetchNewsCountFindByPersonId(Long id);
 }

@@ -56,6 +56,6 @@ CREATE TABLE news_tags(
 CREATE TABLE comments(
 	id  BIGSERIAL PRIMARY KEY,
 	person_id BIGINT REFERENCES persons (id),
-  	news_id BIGINT REFERENCES news (id),
+  news_id BIGINT REFERENCES news (id),
 	comment TEXT NOT NULL
 );

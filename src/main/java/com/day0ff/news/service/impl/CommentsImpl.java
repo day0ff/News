@@ -17,4 +17,14 @@ public class CommentsImpl implements CommentsService{
     public List<Comments> findAll() {
         return commentsRepository.findAll();
     }
+
+    @Override
+    public int getCountPersonComments(Long id) {
+        return commentsRepository.getCountPersonComments(id);
+    }
+
+    @Override
+    public int getCountNewsComments(Long id) {
+        return commentsRepository.getCountNewsComments(id);
+    }
 }
