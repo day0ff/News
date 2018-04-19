@@ -37,4 +37,14 @@ public class NewsImpl implements NewsService {
     public int fetchNewsCountFindByPersonId(Long id) {
         return newsRepository.fetchNewsCountFindByPersonId(id);
     }
+
+    @Override
+    public List<News> getNewsFindByTagId(Long id) {
+        return newsRepository.fetchNewsFindByTagId(id);
+    }
+
+    @Override
+    public List<News> getNewsFindByTagTitle(String title) {
+        return newsRepository.getNewsByTagTitle(title);
+    }
 }

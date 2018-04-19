@@ -38,9 +38,6 @@ public class News {
     @Column(name = "views")
     private Integer views;
 
-    @Column(name = "likes")
-    private Integer likes;
-
     @Column(name = "published")
     private Boolean published;
 
@@ -60,7 +57,7 @@ public class News {
     public News() {
     }
 
-    public News(Persons person, String title, String article, String post, String image, Date publicationDate, Integer views, Integer likes, Boolean published) {
+    public News(Persons person, String title, String article, String post, String image, Date publicationDate, Integer views, Boolean published) {
         this.person = person;
         this.title = title;
         this.article = article;
@@ -68,7 +65,6 @@ public class News {
         this.image = image;
         this.publicationDate = publicationDate;
         this.views = views;
-        this.likes = likes;
         this.published = published;
     }
 
@@ -136,14 +132,6 @@ public class News {
         this.views = views;
     }
 
-    public Integer getLikes() {
-        return likes;
-    }
-
-    public void setLikes(Integer likes) {
-        this.likes = likes;
-    }
-
     public Boolean getPublished() {
         return published;
     }
@@ -179,7 +167,6 @@ public class News {
                 ", image='" + image + '\'' +
                 ", publicationDate=" + publicationDate +
                 ", views=" + views +
-                ", likes=" + likes +
                 ", published=" + published +
                 '}';
     }

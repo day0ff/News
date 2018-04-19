@@ -10,4 +10,6 @@ public interface NewsService {
     News fetchFindById(Long id);
     List<News> fetchNewsFindByPersonId(Long id);
     int fetchNewsCountFindByPersonId(Long id);
+    List<News> getNewsFindByTagId(Long id);
+    List<News> getNewsFindByTagTitle(String title);
 }

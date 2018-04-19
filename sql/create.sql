@@ -43,7 +43,6 @@ CREATE TABLE news(
 	image VARCHAR(255) DEFAULT 'news_paper.png',
 	publication_date DATE NOT NULL,
 	views INT DEFAULT 0,
-	likes INT DEFAULT 0,
 	published BOOLEAN DEFAULT FALSE
 );
 
@@ -56,6 +55,13 @@ CREATE TABLE news_tags(
 CREATE TABLE comments(
 	id  BIGSERIAL PRIMARY KEY,
 	person_id BIGINT REFERENCES persons (id),
-  news_id BIGINT REFERENCES news (id),
+  	news_id BIGINT REFERENCES news (id),
 	comment TEXT NOT NULL
+);
+
+CREATE TABLE likes(
+	id  BIGSERIAL PRIMARY KEY,
+	news_id BIGINT REFERENCES news (id),
+  	person_id BIGINT REFERENCES persons (id),
+	CONSTRAINT uni_news_user UNIQUE (news_id, person_id)
 );

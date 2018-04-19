@@ -100,4 +100,21 @@ VALUES ('1', '1','2695 в классике.');
 INSERT INTO comments (person_id , news_id, comment)
 VALUES ('2', '4','Бобрик :)');
 
-
+INSERT INTO likes (news_id , person_id)
+VALUES (1,1);
+INSERT INTO likes (news_id , person_id)
+VALUES (2,1);
+INSERT INTO likes (news_id , person_id)
+VALUES (3,1);
+INSERT INTO likes (news_id , person_id)
+VALUES (4,1);
+INSERT INTO likes (news_id , person_id)
+VALUES (1,2);
+INSERT INTO likes (news_id , person_id)
+VALUES (2,2);
+INSERT INTO likes (news_id , person_id)
+VALUES (1,3);
+INSERT INTO likes (news_id , person_id)
+VALUES (2,3);
+INSERT INTO likes (news_id , person_id)
+VALUES (4,3);
