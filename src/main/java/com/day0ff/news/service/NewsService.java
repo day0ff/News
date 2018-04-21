@@ -12,4 +12,5 @@ public interface NewsService {
     int fetchNewsCountFindByPersonId(Long id);
     List<News> getNewsFindByTagId(Long id);
     List<News> getNewsFindByTagTitle(String title);
+    void incrementNewsViews(Long newsId);
 }

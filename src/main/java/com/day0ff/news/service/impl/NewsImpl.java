@@ -5,6 +5,7 @@ import com.day0ff.news.repository.NewsRepository;
 import com.day0ff.news.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class NewsImpl implements NewsService {
     public List<News> findAll() {
         return newsRepository.findAll();
     }
+
 
     @Override
     public News findById(Long id) {
@@ -46,5 +48,11 @@ public class NewsImpl implements NewsService {
     @Override
     public List<News> getNewsFindByTagTitle(String title) {
         return newsRepository.getNewsByTagTitle(title);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public void incrementNewsViews(Long newsId) {
+        newsRepository.incrementNewsViews(newsId);
     }
 }

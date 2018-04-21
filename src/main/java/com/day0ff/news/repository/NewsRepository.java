@@ -2,7 +2,9 @@ package com.day0ff.news.repository;
 
 import com.day0ff.news.entity.News;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -25,4 +27,8 @@ public interface NewsRepository extends JpaRepository<News, Long> {
 
     @Query("SELECT COUNT(n.person.id) FROM News n WHERE n.person.id = ?1")
     int fetchNewsCountFindByPersonId(Long id);
+
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE News n SET n.views = n.views + 1 WHERE n.id = ?1")
+    void incrementNewsViews( Long newsId);
 }

@@ -3,11 +3,13 @@ package com.day0ff.news.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Entity
+@Transactional
 @Table(name = "news")
 public class News {
     @Id

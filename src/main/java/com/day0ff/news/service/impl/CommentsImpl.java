@@ -19,6 +19,31 @@ public class CommentsImpl implements CommentsService{
     }
 
     @Override
+    public Comments findById(Long id) {
+        return commentsRepository.findById(id);
+    }
+
+    @Override
+    public List<Comments> findCommentsByPerson_Id(Long id) {
+        return commentsRepository.findCommentsByPerson_Id(id);
+    }
+
+    @Override
+    public List<Comments> findCommentsByNews_Id(Long id) {
+        return commentsRepository.findCommentsByNews_Id(id);
+    }
+
+    @Override
+    public List<Comments> getPersonComments(Long id) {
+        return commentsRepository.getPersonComments(id);
+    }
+
+    @Override
+    public List<Comments> getNewsComments(Long id) {
+        return commentsRepository.getNewsComments(id);
+    }
+
+    @Override
     public int getCountPersonComments(Long id) {
         return commentsRepository.getCountPersonComments(id);
     }
@@ -26,5 +51,15 @@ public class CommentsImpl implements CommentsService{
     @Override
     public int getCountNewsComments(Long id) {
         return commentsRepository.getCountNewsComments(id);
+    }
+
+    @Override
+    public Comments save(Comments comment) {
+        return commentsRepository.save(comment);
+    }
+
+    @Override
+    public void delete(Long id) {
+        commentsRepository.delete(id);
     }
 }

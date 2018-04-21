@@ -14,8 +14,23 @@ public class LikesImpl implements LikesService{
     private LikesRepository likesRepository;
 
     @Override
+    public Likes save(Likes likes) {
+        return likesRepository.save(likes);
+    }
+
+    @Override
+    public void delete(Likes likes) {
+        likesRepository.delete(likes);
+    }
+
+    @Override
     public List<Likes> findAll() {
         return likesRepository.findAll();
+    }
+
+    @Override
+    public Likes findByNewsAndPerson(Long newsId, Long personId) {
+        return likesRepository.findByNewsAndPerson(newsId, personId);
     }
 
     @Override
@@ -32,4 +47,5 @@ public class LikesImpl implements LikesService{
     public int isPersonLikeNews(Long personId, Long newsId) {
         return likesRepository.isPersonLikeNews(personId, newsId);
     }
+
 }

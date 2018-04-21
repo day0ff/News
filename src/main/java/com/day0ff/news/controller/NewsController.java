@@ -7,7 +7,9 @@ import com.day0ff.news.entity.News;
 import com.day0ff.news.service.CommentsService;
 import com.day0ff.news.service.LikesService;
 import com.day0ff.news.service.NewsService;
+import com.day0ff.news.service.PersonsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +23,9 @@ public class NewsController {
     private NewsService newsService;
 
     @Autowired
+    private PersonsService personsService;
+
+    @Autowired
     private CommentsService commentsService;
 
     @Autowired
@@ -31,7 +36,7 @@ public class NewsController {
         return likesService.findAll();
     }
 
-    @RequestMapping(value = "likes/count/news/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "news/likes/count/{id}", method = RequestMethod.GET)
     public int getLikesCountNews(@PathVariable("id")  Long id) {
         return likesService.getCountNewsLikes(id);
     }
@@ -41,9 +46,17 @@ public class NewsController {
         return likesService.getCountPersonLikes(id);
     }
 
-    @RequestMapping(value = "likes/{personId}/{newsId}", method = RequestMethod.GET)
-    public int isPersonLikeNews(@PathVariable("personId")  Long personId, @PathVariable("newsId")  Long newsId) {
-        return likesService.isPersonLikeNews(personId, newsId);
+    @RequestMapping(value = "likes/{newsId}/{personId}", method = RequestMethod.GET)
+    public int isPersonLikeNews(@PathVariable("newsId")  Long newsId, @PathVariable("personId")  Long personId) {
+        return likesService.isPersonLikeNews(newsId, personId);
+    }
+
+    @RequestMapping(value = "like/{newsId}/{personId}", method = RequestMethod.GET)
+    public Likes getLikeByNewsAndPerson( @PathVariable("newsId")  Long newsId, @PathVariable("personId")  Long personId) {
+        Likes like = likesService.findByNewsAndPerson(newsId, personId);
+        like.getNews().getPerson().setUser(null);
+        like.getPerson().setUser(null);
+        return like;
     }
 
     @RequestMapping(value = "news", method = RequestMethod.GET)
@@ -51,6 +64,19 @@ public class NewsController {
         return newsService.findAll().stream()
                 .peek(news -> news.getPerson().setUser(null))
                 .collect(Collectors.toList());
+    }
+
+    @RequestMapping(value = "news/{newsId}", method = RequestMethod.GET)
+    public News getNewsById(@PathVariable("newsId")  Long newsId) {
+        News news = newsService.findById(newsId);
+        news.getPerson().setUser(null);
+        return news;
+    }
+
+    @RequestMapping(value = "tags/news/{newsId}", method = RequestMethod.GET)
+    public List<String> getTagsByNewsId(@PathVariable("newsId")  Long newsId) {
+        News news = newsService.fetchFindById(newsId);
+        return news.getTags().stream().map(tag -> tag.getTag()).collect(Collectors.toList());
     }
 
     @RequestMapping(value = "news/tag/{id}", method = RequestMethod.GET)
@@ -85,6 +111,22 @@ public class NewsController {
                 .collect(Collectors.toList());
     }
 
+    @RequestMapping(value = "comments/news/{id}", method = RequestMethod.GET)
+    public List<Comments> getNewsComments(@PathVariable("id") Long id) {
+        return commentsService.findCommentsByNews_Id(id).stream()
+                .peek(comment -> comment.getPerson().setUser(null))
+                .peek(comment -> comment.getNews().setPerson(null))
+                .collect(Collectors.toList());
+    }
+
+    @RequestMapping(value = "comments/person/{id}", method = RequestMethod.GET)
+    public List<Comments> getPersonComments(@PathVariable("id") Long id) {
+        return commentsService.findCommentsByPerson_Id(id).stream()
+                .peek(comment -> comment.getPerson().setUser(null))
+                .peek(comment -> comment.getNews().setPerson(null))
+                .collect(Collectors.toList());
+    }
+
     @RequestMapping(value = "comments/person/count/{id}", method = RequestMethod.GET)
     public int getCommentsPersonCount(@PathVariable("id") Long id) {
         return commentsService.getCountPersonComments(id);
@@ -94,4 +136,33 @@ public class NewsController {
     public int getCommentsNewsCount(@PathVariable("id") Long id) {
         return commentsService.getCountNewsComments(id);
     }
+
+/*    @RequestMapping(value = "like/save", method = RequestMethod.POST)
+    public Likes saveLike(@RequestParam("news_id") Long newsId, @RequestParam("person_id") Long personId) {
+        Likes like = new Likes();
+        like.setNews(newsService.findById(newsId));
+        like.getNews().getPerson().setUser(null);
+        like.setPerson(personsService.findById(personId));
+        like.getPerson().setUser(null);
+        return likesService.save(like);
+    }
+
+    @RequestMapping(value = "like/delete", method = RequestMethod.POST)
+    public void deleteLike(@RequestParam("news_id") Long newsId, @RequestParam("person_id") Long personId) {
+        Likes like = likesService.findByNewsAndPerson(newsId, personId);
+        likesService.delete(like);
+    }*/
+
+    @RequestMapping(value = "news/views/{newsId}", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public void incrementNewsViews(@PathVariable("newsId") Long newsId) {
+        newsService.incrementNewsViews(newsId);
+    }
+
+/*    @RequestMapping(value = "/comment/delete", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteComment(@RequestParam("id") Long commentId) {
+        System.out.println("Comment id = "  + commentId);
+        commentsService.delete(commentId);
+    }*/
 }
