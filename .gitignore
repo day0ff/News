@@ -5,3 +5,5 @@ News.iml
 # compile
 /target
 
+#webapp
+/src/main/webapp
