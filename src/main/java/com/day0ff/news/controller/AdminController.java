@@ -20,7 +20,7 @@ public class AdminController {
     private PersonsService personsService;
 
     @RequestMapping(value = "/persons", method = RequestMethod.GET)
-    public List<Persons> getPersonRolesByName() {
+    public List<Persons> getPerson() {
         return personsService.findAll();
     }
 
@@ -40,9 +40,14 @@ public class AdminController {
         return roles.stream().map(role -> role.getRole()).collect(Collectors.toList());
     }*/
 
-    @RequestMapping(value = "/person/roles/{id}", method = RequestMethod.GET)
+/*    @RequestMapping(value = "/person/roles/{id}", method = RequestMethod.GET)
     public List<String> getPersonRolesByNameAndPassword(@PathVariable("id") Long id) {
         List<Roles> roles = usersService.findById(id).getRoles();
         return roles.stream().map(role -> role.getRole()).collect(Collectors.toList());
+    }*/
+
+    @RequestMapping(value = "/person/roles/{id}", method = RequestMethod.GET)
+    public List<Roles> getPersonRolesByNameAndPassword(@PathVariable("id") Long id) {
+        return usersService.findById(id).getRoles();
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class PersonsImpl implements PersonsService{
+public class PersonsImpl implements PersonsService {
     @Autowired
     private PersonsRepository personsRepository;
 
@@ -31,5 +31,15 @@ public class PersonsImpl implements PersonsService{
     @Override
     public Persons findByNameAndPassword(String userName, String password) {
         return personsRepository.findByUserNameAndPassword(userName, password);
+    }
+
+    @Override
+    public Persons save(Persons person) {
+        return personsRepository.saveAndFlush(person);
+    }
+
+    @Override
+    public void delete(Long id) {
+        personsRepository.delete(id);
     }
 }

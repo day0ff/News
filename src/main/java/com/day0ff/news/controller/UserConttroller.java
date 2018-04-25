@@ -43,6 +43,12 @@ public class UserConttroller {
         return usersService.findByNameAndPassword(name, password);
     }
 
+/*    @RequestMapping(value = "/roles", method = RequestMethod.POST)
+    public List<String> getPersonRolesByNameAndPassword(@RequestParam("name") String name, @RequestParam("password") String password) {
+        List<Roles> roles = usersService.findByNameAndPassword(name, password).getRoles();
+        return roles.stream().map(role -> role.getRole()).collect(Collectors.toList());
+    }*/
+
     @RequestMapping(value = "/roles", method = RequestMethod.POST)
     public List<String> getPersonRolesByNameAndPassword(@RequestParam("name") String name, @RequestParam("password") String password) {
         List<Roles> roles = usersService.findByNameAndPassword(name, password).getRoles();

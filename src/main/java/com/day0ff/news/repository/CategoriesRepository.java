@@ -1,12 +1,10 @@
 package com.day0ff.news.repository;
 
-import com.day0ff.news.entity.Tags;
+import com.day0ff.news.entity.Categories;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public interface TagsRepository extends JpaRepository<Tags,Long> {
-    Tags findById(Long id);
+public interface CategoriesRepository extends JpaRepository<Categories,Long> {
+    Categories findById(Long id);
 }

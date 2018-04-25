@@ -1,9 +1,13 @@
 package com.day0ff.news.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.transaction.Transactional;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,14 +38,25 @@ public class News {
     private String image;
 
     @Column(name = "publication_date")
-    @Temporal(TemporalType.DATE)
-    private Date publicationDate;
+//    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private java.util.Date publicationDate;
 
     @Column(name = "views")
     private Integer views;
 
     @Column(name = "published")
     private Boolean published;
+
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "news_categories",
+            joinColumns = {@JoinColumn(name = "news_id")},
+            inverseJoinColumns = {@JoinColumn(name = "category_id")}
+    )
+    @JsonIgnore
+    private List<Categories> categories = new ArrayList<>();
 
     @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @JoinTable(
@@ -126,6 +141,15 @@ public class News {
         this.publicationDate = publicationDate;
     }
 
+    public void setPublicationDateString(String publicationDate) {
+        SimpleDateFormat yyyyMMddFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            this.publicationDate = yyyyMMddFormat.parse(publicationDate);
+        } catch (ParseException e1) {
+            e1.printStackTrace();
+        }
+    }
+
     public Integer getViews() {
         return views;
     }
@@ -140,6 +164,14 @@ public class News {
 
     public void setPublished(Boolean published) {
         this.published = published;
+    }
+
+    public List<Categories> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Categories> categories) {
+        this.categories = categories;
     }
 
     public List<Tags> getTags() {
@@ -160,6 +192,7 @@ public class News {
 
     @Override
     public String toString() {
+        SimpleDateFormat yyyyMMddFormat = new SimpleDateFormat("yyyy-MM-dd");
         return "News{" +
                 "id=" + id +
                 ", person=" + person +
@@ -167,7 +200,7 @@ public class News {
                 ", article='" + article + '\'' +
                 ", post='" + post + '\'' +
                 ", image='" + image + '\'' +
-                ", publicationDate=" + publicationDate +
+                ", publicationDate=" + yyyyMMddFormat.format(publicationDate) +
                 ", views=" + views +
                 ", published=" + published +
                 '}';

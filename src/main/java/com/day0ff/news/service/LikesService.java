@@ -8,6 +8,7 @@ public interface LikesService {
     Likes save(Likes likes);
     void delete(Likes likes);
     List<Likes> findAll();
+    List<Likes> findByNews(Long newsId);
     Likes findByNewsAndPerson(Long newsId, Long personId);
     int getCountNewsLikes(Long id);
     int getCountPersonLikes(Long id);

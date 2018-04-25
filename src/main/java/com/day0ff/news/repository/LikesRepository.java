@@ -5,8 +5,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface LikesRepository extends JpaRepository<Likes, Long> {
+    @Query("SELECT l FROM Likes l WHERE l.news.id = ?1")
+    List<Likes> findByNews(Long newsId);
+
     @Query("SELECT l FROM Likes l WHERE l.news.id = ?1 AND l.person.id = ?2")
     Likes findByNewsAndPerson(Long newsId, Long personId);
 

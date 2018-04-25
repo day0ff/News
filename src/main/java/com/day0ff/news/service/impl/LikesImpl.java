@@ -29,6 +29,11 @@ public class LikesImpl implements LikesService{
     }
 
     @Override
+    public List<Likes> findByNews(Long newsId) {
+        return likesRepository.findByNews(newsId);
+    }
+
+    @Override
     public Likes findByNewsAndPerson(Long newsId, Long personId) {
         return likesRepository.findByNewsAndPerson(newsId, personId);
     }

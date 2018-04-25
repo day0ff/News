@@ -15,10 +15,24 @@ public class NewsImpl implements NewsService {
     private NewsRepository newsRepository;
 
     @Override
+    public News save(News news) {
+        return newsRepository.saveAndFlush(news);
+    }
+
+    @Override
+    public News update(News news) {
+        return newsRepository.saveAndFlush(news);
+    }
+
+    @Override
+    public void delete(Long id) {
+        newsRepository.delete(id);
+    }
+
+    @Override
     public List<News> findAll() {
         return newsRepository.findAll();
     }
-
 
     @Override
     public News findById(Long id) {
@@ -31,6 +45,11 @@ public class NewsImpl implements NewsService {
     }
 
     @Override
+    public News fetchNewsCategoriesFindById(Long id) {
+        return newsRepository.fetchNewsCategoriesFindById(id);
+    }
+
+    @Override
     public List<News> fetchNewsFindByPersonId(Long id) {
         return newsRepository.fetchNewsFindByPersonId(id);
     }
@@ -38,6 +57,11 @@ public class NewsImpl implements NewsService {
     @Override
     public int fetchNewsCountFindByPersonId(Long id) {
         return newsRepository.fetchNewsCountFindByPersonId(id);
+    }
+
+    @Override
+    public List<News> findNewsByCategories(String category) {
+        return newsRepository.findNewsByCategories(category);
     }
 
     @Override

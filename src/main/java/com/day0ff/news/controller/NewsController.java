@@ -1,13 +1,8 @@
 package com.day0ff.news.controller;
 
 
-import com.day0ff.news.entity.Comments;
-import com.day0ff.news.entity.Likes;
-import com.day0ff.news.entity.News;
-import com.day0ff.news.service.CommentsService;
-import com.day0ff.news.service.LikesService;
-import com.day0ff.news.service.NewsService;
-import com.day0ff.news.service.PersonsService;
+import com.day0ff.news.entity.*;
+import com.day0ff.news.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -31,9 +26,28 @@ public class NewsController {
     @Autowired
     private LikesService likesService;
 
+    @Autowired
+    private CategoriesService categoriesService;
+
+    @Autowired
+    private TagsService tagsService;
+
+    @Autowired
+    private RolesService rolesService;
+
+    @RequestMapping(value = "categories", method = RequestMethod.GET)
+    public List<Categories> getCategories() {
+        return categoriesService.findAll();
+    }
+
     @RequestMapping(value = "likes", method = RequestMethod.GET)
     public List<Likes> getLikes() {
         return likesService.findAll();
+    }
+
+    @RequestMapping(value = "roles", method = RequestMethod.GET)
+    public List<Roles> getRoles() {
+        return rolesService.findAll();
     }
 
     @RequestMapping(value = "news/likes/count/{id}", method = RequestMethod.GET)
@@ -73,10 +87,34 @@ public class NewsController {
         return news;
     }
 
+    @RequestMapping(value = "tags", method = RequestMethod.GET)
+    public List<Tags> getTagsByNewsId() {
+        return tagsService.findAll();
+    }
+
     @RequestMapping(value = "tags/news/{newsId}", method = RequestMethod.GET)
-    public List<String> getTagsByNewsId(@PathVariable("newsId")  Long newsId) {
-        News news = newsService.fetchFindById(newsId);
-        return news.getTags().stream().map(tag -> tag.getTag()).collect(Collectors.toList());
+    public List<Tags> getTagsByNewsId(@PathVariable("newsId")  Long newsId) {
+        return newsService.fetchFindById(newsId).getTags();
+    }
+
+    @RequestMapping(value = "category/news/{id}", method = RequestMethod.GET)
+    public  List<Categories>  getNewsCategoryById(@PathVariable("id")  Long id) {
+        return newsService.fetchNewsCategoriesFindById(id).getCategories();
+    }
+
+    @RequestMapping(value = "news/category/{category}", method = RequestMethod.GET)
+    public List<News> getNewsByCategory(@PathVariable("category")  String category) {
+        return newsService.findNewsByCategories(category).stream()
+                .peek(news -> news.getPerson().setUser(null))
+                .collect(Collectors.toList());
+    }
+
+    @RequestMapping(value = "news/category/{category}/{limit}", method = RequestMethod.GET)
+    public List<News> getNewsByCategoryLimit(@PathVariable("category")  String category, @PathVariable("limit")  Integer limit) {
+        return newsService.findNewsByCategories(category).stream()
+                .peek(news -> news.getPerson().setUser(null))
+                .limit(limit)
+                .collect(Collectors.toList());
     }
 
     @RequestMapping(value = "news/tag/{id}", method = RequestMethod.GET)

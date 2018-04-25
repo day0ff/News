@@ -16,6 +16,12 @@ public interface NewsRepository extends JpaRepository<News, Long> {
     @Query("SELECT n FROM News n JOIN FETCH n.tags t WHERE n.id = ?1")
     News fetchNewsFindById(Long id);
 
+    @Query("SELECT n FROM News n JOIN FETCH n.categories c WHERE n.id = ?1")
+    News fetchNewsCategoriesFindById(Long id);
+
+    @Query("SELECT n FROM News n JOIN FETCH n.categories c WHERE c.category = ?1 ORDER BY n.publicationDate DESC, n.views DESC")
+    List<News> findNewsByCategories(String category);
+
     @Query("SELECT n FROM News n JOIN FETCH n.tags t WHERE t.id = ?1")
     List<News> fetchNewsFindByTagId(Long id);
 

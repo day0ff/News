@@ -1,0 +1,110 @@
+{
+  "App": {
+    "Title": "Hamster News, here and now."
+  },
+  "Nav": {
+    "Home": "News",
+    "World": "World",
+    "News": "News",
+    "Persons": "Persons",
+    "Registration": "Registration",
+    "Message": {
+      "World": "News of the world. The hottest and latest world news."
+    }
+  },
+  "Modal": {
+    "Close": "Close",
+    "Delete": {
+      "Btn": "Delete",
+      "Title": "confirm action"
+    },
+    "Save": {
+      "Btn": "Save",
+      "Title": "confirm action"
+    },
+    "Update": {
+      "Btn": "Update",
+      "Title": "confirm action"
+    },
+    "Login": {
+      "Btn": "Sign in",
+      "Title": "Login form :",
+      "Login": "login",
+      "Password": "password",
+      "Error": "Wrong login or password.",
+      "LogOut": "Log out",
+      "NoAccount": "Нет аккаунта?",
+      "Register": "Register."
+    },
+    "Registration": {
+      "Btn": "Registration",
+      "Title": "Registration form :",
+      "Login": "login",
+      "Password": "password"
+    }
+  },
+  "Home": {
+    "Persons": "Favorite Persons:"
+  },
+  "News": {
+    "Title": "News",
+    "NewNews": "New news",
+    "Details": {
+      "News": "News",
+      "Details": "details",
+      "CreateNewNews": "Create a new news.",
+      "Edit": "Edit",
+      "AuthorOfArticle":"author of article:",
+      "Author": "author",
+      "Title": "title",
+      "Article": "article",
+      "Post": "post",
+      "Image": "image",
+      "Date": "date",
+      "Views": "views",
+      "Published": "published",
+      "Comments": "Comments",
+      "Comment": "comment",
+      "NoComments": "No comments yet.",
+      "WriteComment": "Write your comment.",
+      "NotFound": "News not found."
+    }
+  },
+  "Persons": {
+    "Title": "Persons",
+    "NewPerson": "New Person",
+    "NotFound": "Person not found.",
+    "Details": {
+      "Person": "Person",
+      "Kind": "person",
+      "FirstName": "first name",
+      "LastName": "last name",
+      "ScreenName": "screen name",
+      "Image": "image",
+      "Details": "details",
+      "CreateNewPerson": "Create new Person",
+      "BtnBack": "go back"
+    }
+  },
+  "User": {
+    "Details": {
+      "User": "Login",
+      "Details": "details",
+      "UserName": "login",
+      "Password": "password"
+    }
+  },
+  "Roles": {
+    "Roles": "Roles",
+    "Details": "details",
+    "Admin": "Administrator",
+    "Editor": "Editor",
+    "User": "User"
+  },
+  "Registration": {
+    "Login": "login",
+    "Password": "password",
+    "Register": "Register"
+  },
+  "PageNotFound": "Page not found."
+}

@@ -4,6 +4,7 @@ import com.day0ff.news.entity.Tags;
 
 import java.util.List;
 
-public interface TagsServise {
+public interface TagsService {
     List<Tags> findAll();
+    Tags findById(Long id);
 }
