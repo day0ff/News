@@ -22,4 +22,9 @@ public class TagsImpl implements TagsService {
     public Tags findById(Long id) {
         return tagsRepository.findById(id);
     }
+
+    @Override
+    public Tags save(Tags tag) {
+        return tagsRepository.saveAndFlush(tag);
+    }
 }

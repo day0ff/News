@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface UsersRepository extends JpaRepository<Users,String> {
+public interface UsersRepository extends JpaRepository<Users, String> {
     @Query("SELECT u FROM Users u JOIN FETCH u.roles r WHERE u.userName = ?1 AND u.password =?2")
     Users findByUserNameAndPassword(String userName, String password);
 
@@ -18,4 +18,7 @@ public interface UsersRepository extends JpaRepository<Users,String> {
 
     @Query("SELECT u FROM Users u JOIN FETCH u.roles r WHERE u.id = ?1")
     Users findById(Long id);
+
+    @Query("SELECT COUNT(u.id) FROM Users u WHERE u.userName = ?1")
+    int getCountUserByUserName(String userName);
 }

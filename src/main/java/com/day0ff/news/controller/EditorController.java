@@ -40,7 +40,7 @@ public class EditorController {
                          @RequestParam("image") String image,
                          @RequestParam("publication_date") String publicationDate,
                          @RequestParam("published") Boolean published
-                        ) {
+    ) {
         News news = new News();
         news.setPerson(personsService.findById(personId));
         news.setTitle(title);
@@ -69,14 +69,14 @@ public class EditorController {
 
     @RequestMapping(value = "/news/update", method = RequestMethod.POST)
     public News saveNews(
-                           @RequestParam("id") Long newsId,
-                           @RequestParam("author") Long personId,
-                           @RequestParam("title") String title,
-                           @RequestParam("article") String article,
-                           @RequestParam("post") String post,
-                           @RequestParam("image") String image,
-                           @RequestParam("publication_date") String publicationDate,
-                           @RequestParam("published") Boolean published
+            @RequestParam("id") Long newsId,
+            @RequestParam("author") Long personId,
+            @RequestParam("title") String title,
+            @RequestParam("article") String article,
+            @RequestParam("post") String post,
+            @RequestParam("image") String image,
+            @RequestParam("publication_date") String publicationDate,
+            @RequestParam("published") Boolean published
     ) {
         News news = newsService.findById(newsId);
         news.setPerson(personsService.findById(personId));
@@ -96,7 +96,7 @@ public class EditorController {
     }
 
 
-    @RequestMapping(value = "/news/categories/save", method = RequestMethod.POST)
+/*    @RequestMapping(value = "/news/categories/save", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void saveNewsCategories(@RequestParam("newsId") Long newsId,
                                    @RequestParam("categoryId") Long categoryId) {
@@ -106,7 +106,7 @@ public class EditorController {
             news = newsService.fetchNewsCategoriesFindById(newsId);
             categories = news.getCategories();
 
-        } catch (Exception e){
+        } catch (Exception e) {
             news = newsService.findById(newsId);
             categories = new ArrayList<>();
         }
@@ -114,20 +114,15 @@ public class EditorController {
         categories.add(category);
         news.setCategories(categories);
         newsService.save(news);
-    }
+    }*/
 
     @RequestMapping(value = "/news/categories/add", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public void addNewsCategories(@RequestParam(value="newsId", required=false) Long newsId,
-                                  @RequestParam(value="categoryId", required=false) List<Long> categoryList) {
-        News news;
+    public void addNewsCategories(@RequestParam(value = "newsId", required = false) Long newsId,
+                                  @RequestParam(value = "categoryId", required = false) List<Long> categoryList) {
+        News news = newsService.findById(newsId);
         List<Categories> categories = new ArrayList<>();
-        try {
-            news = newsService.fetchNewsCategoriesFindById(newsId);
-        } catch (Exception e){
-            news = newsService.findById(newsId);
-        }
-        categoryList.forEach(id -> categories.add(categoriesService.findById(id)) );
+        categoryList.forEach(id -> categories.add(categoriesService.findById(id)));
         news.setCategories(categories);
         newsService.save(news);
     }
@@ -153,38 +148,21 @@ public class EditorController {
         newsService.save(news);
     }
 
-    @RequestMapping(value = "/news/tags/save", method = RequestMethod.POST)
+    @RequestMapping(value = "/tag/new", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public void saveNewsTags(@RequestParam("newsId") Long newsId,
-                                   @RequestParam("tagId") Long tagId) {
-        News news;
-        List<Tags> tags;
-        try {
-            news = newsService.fetchFindById(newsId);
-            tags = news.getTags();
-
-        } catch (Exception e){
-            news = newsService.findById(newsId);
-            tags = new ArrayList<>();
-        }
-        Tags tag = tagsService.findById(tagId);
-        tags.add(tag);
-        news.setTags(tags);
-        newsService.save(news);
+    public Tags saveNewTag(@RequestParam("newTag") String newTag) {
+        Tags tag = new Tags();
+        tag.setTag(newTag);
+        return tagsService.save(tag);
     }
 
     @RequestMapping(value = "/news/tags/add", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public void addNewsTags(@RequestParam(value="newsId", required=false) Long newsId,
-                                  @RequestParam(value="tagId", required=false) List<Long> categoryList) {
-        News news;
+    public void addNewsTags(@RequestParam(value = "newsId", required = false) Long newsId,
+                            @RequestParam(value = "tagId", required = false) List<Long> tagList) {
+        News news = newsService.findById(newsId);
         List<Tags> tags = new ArrayList<>();
-        try {
-            news = newsService.fetchNewsCategoriesFindById(newsId);
-        } catch (Exception e){
-            news = newsService.findById(newsId);
-        }
-        categoryList.forEach(id -> tags.add(tagsService.findById(id)) );
+        tagList.forEach(id -> tags.add(tagsService.findById(id)));
         news.setTags(tags);
         newsService.save(news);
     }

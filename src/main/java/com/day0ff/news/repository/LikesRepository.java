@@ -12,6 +12,8 @@ public interface LikesRepository extends JpaRepository<Likes, Long> {
     @Query("SELECT l FROM Likes l WHERE l.news.id = ?1")
     List<Likes> findByNews(Long newsId);
 
+    List<Likes> findByPersonId(Long personId);
+
     @Query("SELECT l FROM Likes l WHERE l.news.id = ?1 AND l.person.id = ?2")
     Likes findByNewsAndPerson(Long newsId, Long personId);
 

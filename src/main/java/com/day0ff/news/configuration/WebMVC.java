@@ -38,11 +38,13 @@ public class WebMVC extends WebMvcConfigurerAdapter {
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("forward:/index.html");
         registry.addViewController("/Новости").setViewName("forward:/index.html");
+        registry.addViewController("/home").setViewName("forward:/index.html");
         registry.addViewController("/news").setViewName("forward:/index.html");
         registry.addViewController("/news/detail/*").setViewName("forward:/index.html");
         registry.addViewController("/edit").setViewName("forward:/index.html");
         registry.addViewController("/edit/detail/*").setViewName("forward:/index.html");
         registry.addViewController("/category/*").setViewName("forward:/index.html");
+        registry.addViewController("/person/info").setViewName("forward:/index.html");
         registry.addViewController("/persons").setViewName("forward:/index.html");
         registry.addViewController("/person/detail/*").setViewName("forward:/index.html");
         registry.addViewController("/registration").setViewName("forward:/index.html");

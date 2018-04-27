@@ -9,4 +9,7 @@ public interface UsersService {
     Users findByName(String userName);
     List<Users> findAll();
     Users findById(Long id);
+    Users save(Users user);
+    void delete(Users user);
+    int getCountUserByUserName(String userName);
 }

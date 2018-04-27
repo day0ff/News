@@ -78,7 +78,9 @@ public class UserConttroller {
     }
 
     @RequestMapping(value = "/comment/save", method = RequestMethod.POST)
-    public Comments saveComment(@RequestParam("person_id") Long personId, @RequestParam("news_id") Long newsId, @RequestParam("comment") String comment) {
+    public Comments saveComment(@RequestParam("person_id") Long personId,
+                                @RequestParam("news_id") Long newsId,
+                                @RequestParam("comment") String comment) {
         Comments comments = new Comments();
         comments.setPerson(personsService.findById(personId));
         comments.getPerson().setUser(null);
@@ -88,4 +90,63 @@ public class UserConttroller {
         return commentsService.save(comments);
     }
 
+    @RequestMapping(value = "/user/update", method = RequestMethod.POST)
+    public Users savePerson(
+            @RequestParam("userName") String userName,
+            @RequestParam("password") String password,
+            @RequestParam("newName") String newName,
+            @RequestParam("newPassword") String newPassword
+    ) {
+        Users user = usersService.findByNameAndPassword(userName, password);
+        user.setUserName(newName);
+        user.setPassword(newPassword);
+        return usersService.save(user);
+    }
+
+    @RequestMapping(value = "/person/update", method = RequestMethod.POST)
+    public Persons savePerson(
+            @RequestParam("userName") String userName,
+            @RequestParam("password") String password,
+            @RequestParam("firstName") String firstName,
+            @RequestParam("lastName") String lastName,
+            @RequestParam("screenName") String screenName,
+            @RequestParam("image") String image
+    ) {
+        Persons person = personsService.findByNameAndPassword(userName, password);
+        person.setFirstName(firstName);
+        person.setLastName(lastName);
+        person.setScreenName(screenName);
+        person.setImage(image);
+        return personsService.save(person);
+    }
+
+    @RequestMapping(value = "/person/delete", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    public void deletePerson(
+            @RequestParam("userName") String userName,
+            @RequestParam("password") String password,
+            @RequestParam("personId") Long personId
+    ) {
+        List<News> news = newsService.fetchNewsFindByPersonId(personId);
+        news.forEach(currentNews -> {
+            currentNews.setCategories(null);
+            currentNews.setTags(null);
+            newsService.save(currentNews);
+            List<Likes> likes = likesService.findByNews(currentNews.getId());
+            likes.forEach(like -> likesService.delete(like));
+            List<Comments> comments = commentsService.getNewsComments(currentNews.getId());
+            comments.forEach(comment -> commentsService.delete(comment.getId()));
+            newsService.delete(currentNews.getId());
+        });
+        Persons person = personsService.findByNameAndPassword(userName, password);
+        person.setUser(null);
+        List<Likes> likes = likesService.findByPersonId(personId);
+        likes.forEach(like -> likesService.delete(like));
+        List<Comments> comments = commentsService.getPersonComments(personId);
+        comments.forEach(comment -> commentsService.delete(comment.getId()));
+        personsService.delete(personId);
+        Users user = usersService.findByName(userName);
+        user.setRoles(null);
+        usersService.delete(user);
+    }
 }

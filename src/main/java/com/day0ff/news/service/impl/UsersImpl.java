@@ -36,4 +36,19 @@ public class UsersImpl implements UsersService {
     public Users findById(Long id) {
         return usersRepository.findById(id);
     }
+
+    @Override
+    public Users save(Users user) {
+        return usersRepository.saveAndFlush(user);
+    }
+
+    @Override
+    public void delete(Users user) {
+        usersRepository.delete(user);
+    }
+
+    @Override
+    public int getCountUserByUserName(String userName) {
+        return usersRepository.getCountUserByUserName(userName);
+    }
 }

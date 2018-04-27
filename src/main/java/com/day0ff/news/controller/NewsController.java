@@ -5,8 +5,10 @@ import com.day0ff.news.entity.*;
 import com.day0ff.news.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,6 +37,9 @@ public class NewsController {
     @Autowired
     private RolesService rolesService;
 
+    @Autowired
+    private UsersService usersService;
+
     @RequestMapping(value = "categories", method = RequestMethod.GET)
     public List<Categories> getCategories() {
         return categoriesService.findAll();
@@ -51,22 +56,22 @@ public class NewsController {
     }
 
     @RequestMapping(value = "news/likes/count/{id}", method = RequestMethod.GET)
-    public int getLikesCountNews(@PathVariable("id")  Long id) {
+    public int getLikesCountNews(@PathVariable("id") Long id) {
         return likesService.getCountNewsLikes(id);
     }
 
     @RequestMapping(value = "likes/count/person/{id}", method = RequestMethod.GET)
-    public int getLikesCountPerson(@PathVariable("id")  Long id) {
+    public int getLikesCountPerson(@PathVariable("id") Long id) {
         return likesService.getCountPersonLikes(id);
     }
 
     @RequestMapping(value = "likes/{newsId}/{personId}", method = RequestMethod.GET)
-    public int isPersonLikeNews(@PathVariable("newsId")  Long newsId, @PathVariable("personId")  Long personId) {
+    public int isPersonLikeNews(@PathVariable("newsId") Long newsId, @PathVariable("personId") Long personId) {
         return likesService.isPersonLikeNews(newsId, personId);
     }
 
     @RequestMapping(value = "like/{newsId}/{personId}", method = RequestMethod.GET)
-    public Likes getLikeByNewsAndPerson( @PathVariable("newsId")  Long newsId, @PathVariable("personId")  Long personId) {
+    public Likes getLikeByNewsAndPerson(@PathVariable("newsId") Long newsId, @PathVariable("personId") Long personId) {
         Likes like = likesService.findByNewsAndPerson(newsId, personId);
         like.getNews().getPerson().setUser(null);
         like.getPerson().setUser(null);
@@ -81,7 +86,7 @@ public class NewsController {
     }
 
     @RequestMapping(value = "news/{newsId}", method = RequestMethod.GET)
-    public News getNewsById(@PathVariable("newsId")  Long newsId) {
+    public News getNewsById(@PathVariable("newsId") Long newsId) {
         News news = newsService.findById(newsId);
         news.getPerson().setUser(null);
         return news;
@@ -93,39 +98,46 @@ public class NewsController {
     }
 
     @RequestMapping(value = "tags/news/{newsId}", method = RequestMethod.GET)
-    public List<Tags> getTagsByNewsId(@PathVariable("newsId")  Long newsId) {
+    public List<Tags> getTagsByNewsId(@PathVariable("newsId") Long newsId) {
         return newsService.fetchFindById(newsId).getTags();
     }
 
     @RequestMapping(value = "category/news/{id}", method = RequestMethod.GET)
-    public  List<Categories>  getNewsCategoryById(@PathVariable("id")  Long id) {
+    public List<Categories> getNewsCategoryById(@PathVariable("id") Long id) {
         return newsService.fetchNewsCategoriesFindById(id).getCategories();
     }
 
     @RequestMapping(value = "news/category/{category}", method = RequestMethod.GET)
-    public List<News> getNewsByCategory(@PathVariable("category")  String category) {
+    public List<News> getNewsByCategory(@PathVariable("category") String category) {
         return newsService.findNewsByCategories(category).stream()
                 .peek(news -> news.getPerson().setUser(null))
                 .collect(Collectors.toList());
     }
 
     @RequestMapping(value = "news/category/{category}/{limit}", method = RequestMethod.GET)
-    public List<News> getNewsByCategoryLimit(@PathVariable("category")  String category, @PathVariable("limit")  Integer limit) {
+    public List<News> getNewsByCategoryLimit(@PathVariable("category") String category, @PathVariable("limit") Integer limit) {
         return newsService.findNewsByCategories(category).stream()
                 .peek(news -> news.getPerson().setUser(null))
                 .limit(limit)
                 .collect(Collectors.toList());
     }
 
+    @RequestMapping(value = "news/person/{personId}", method = RequestMethod.GET)
+    public List<News> getNewsByPersonId(@PathVariable("personId") Long personId) {
+        return newsService.fetchNewsFindByPersonId(personId).stream()
+                .peek(news -> news.getPerson().setUser(null))
+                .collect(Collectors.toList());
+    }
+
     @RequestMapping(value = "news/tag/{id}", method = RequestMethod.GET)
-    public List<News> getNewsByTagId(@PathVariable("id")  Long id) {
+    public List<News> getNewsByTagId(@PathVariable("id") Long id) {
         return newsService.getNewsFindByTagId(id).stream()
                 .peek(news -> news.getPerson().setUser(null))
                 .collect(Collectors.toList());
     }
 
     @RequestMapping(value = "news/tag/title/{title}", method = RequestMethod.GET)
-    public List<News> getNewsByTagTitle(@PathVariable("title")  String title) {
+    public List<News> getNewsByTagTitle(@PathVariable("title") String title) {
         return newsService.getNewsFindByTagTitle(title).stream()
                 .peek(news -> news.getPerson().setUser(null))
                 .collect(Collectors.toList());
@@ -203,4 +215,41 @@ public class NewsController {
         System.out.println("Comment id = "  + commentId);
         commentsService.delete(commentId);
     }*/
+
+    @RequestMapping(value = "/users/save", method = RequestMethod.POST)
+    public ResponseEntity saveUser(@RequestParam("userName") String userName,
+                                   @RequestParam("password") String password) {
+        if (usersService.getCountUserByUserName(userName) == 0) {
+            Users user = new Users();
+            user.setUserName(userName);
+            user.setPassword(password);
+            user.setEnabled(true);
+            usersService.save(user);
+            List<Roles> roles = new ArrayList<>();
+            Roles role = rolesService.findById(1L);
+            roles.add(role);
+            user.setRoles(roles);
+            usersService.save(user);
+            return new ResponseEntity(HttpStatus.OK);
+        }
+        return new ResponseEntity(HttpStatus.FOUND);
+    }
+
+    @RequestMapping(value = "/users/save/person", method = RequestMethod.POST)
+    public Persons saveUserPerson(@RequestParam("userName") String userName,
+                                  @RequestParam("password") String password,
+                                  @RequestParam("firstName") String firstName,
+                                  @RequestParam("lastName") String lastName,
+                                  @RequestParam("screenName") String screenName,
+                                  @RequestParam("image") String image
+    ) {
+        Users user = usersService.findByNameAndPassword(userName, password);
+        Persons person = new Persons();
+        person.setUser(user);
+        person.setFirstName(firstName);
+        person.setLastName(lastName);
+        person.setScreenName(screenName);
+        person.setImage(image);
+        return personsService.save(person);
+    }
 }
