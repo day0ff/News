@@ -5,50 +5,71 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * The class entity to store information about News.
+ */
 @Entity
-@Transactional
 @Table(name = "news")
 public class News {
+    /**
+     * property - of News id
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", columnDefinition = "serial")
     private Long id;
-
+    /**
+     * property - of News reference to Persons
+     */
     @OneToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "author")
     private Persons person;
-
+    /**
+     * property - of News title
+     */
     @Column(name = "title")
     private String title;
-
+    /**
+     * property - of News article
+     */
     @Column(name = "article")
     private String article;
-
+    /**
+     * property - of News post
+     */
     @Column(name = "post")
     private String post;
-
+    /**
+     * property - of News image
+     */
     @Column(name = "image")
     private String image;
-
+    /**
+     * property - of News publication date
+     */
     @Column(name = "publication_date")
-//    @Temporal(TemporalType.DATE)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @JsonFormat(pattern = "yyyy-MM-dd")
     private java.util.Date publicationDate;
-
+    /**
+     * property - of News views
+     */
     @Column(name = "views")
     private Integer views;
-
+    /**
+     * property - of News publication
+     */
     @Column(name = "published")
     private Boolean published;
-
+    /**
+     * property - of News Categories list
+     */
     @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @JoinTable(
             name = "news_categories",
@@ -57,7 +78,9 @@ public class News {
     )
     @JsonIgnore
     private List<Categories> categories = new ArrayList<>();
-
+    /**
+     * property - of News Tags list
+     */
     @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @JoinTable(
             name = "news_tags",
@@ -66,14 +89,29 @@ public class News {
     )
     @JsonIgnore
     private List<Tags> tags = new ArrayList<>();
-
+    /**
+     * property - of News Comments list
+     */
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "news")
     private List<Comments> comments = new ArrayList<>();
-
+    /**
+     * Class constructor. Creates a new default object News
+     */
     public News() {
     }
-
+    /**
+     * Class constructor. Creates a new object News with the specified values
+     *
+     * @param person  - News person
+     * @param title  - News title
+     * @param article  - News article
+     * @param post  - News post
+     * @param image  - News image
+     * @param publicationDate  - News publication date
+     * @param views  - News views
+     * @param published  - News published
+     */
     public News(Persons person, String title, String article, String post, String image, Date publicationDate, Integer views, Boolean published) {
         this.person = person;
         this.title = title;

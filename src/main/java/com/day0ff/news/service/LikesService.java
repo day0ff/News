@@ -6,12 +6,20 @@ import java.util.List;
 
 public interface LikesService {
     Likes save(Likes likes);
+
     void delete(Likes likes);
+
     List<Likes> findAll();
+
     List<Likes> findByNews(Long newsId);
+
     List<Likes> findByPersonId(Long personId);
+
     Likes findByNewsAndPerson(Long newsId, Long personId);
+
     int getCountNewsLikes(Long id);
+
     int getCountPersonLikes(Long id);
+
     int isPersonLikeNews(Long personId, Long newsId);
 }

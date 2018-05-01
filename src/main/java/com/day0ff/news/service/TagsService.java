@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface TagsService {
     List<Tags> findAll();
+
     Tags findById(Long id);
+
     Tags save(Tags tag);
 }

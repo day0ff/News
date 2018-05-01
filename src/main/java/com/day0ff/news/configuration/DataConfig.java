@@ -1,7 +1,11 @@
 package com.day0ff.news.configuration;
 
 import org.hibernate.jpa.HibernatePersistenceProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +19,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
+import java.util.Locale;
 import java.util.Properties;
 
 /**
@@ -26,6 +31,15 @@ import java.util.Properties;
 @PropertySource("classpath:app.properties")
 @EnableJpaRepositories("com.day0ff.news.repository")
 public class DataConfig {
+    /**
+     * property - set logger
+     */
+    final static Logger logger = LoggerFactory.getLogger(DataConfig.class);
+    /**
+     * property - set MessageSource bean
+     */
+    @Autowired
+    private MessageSource messageSource;
     /**
      * property - set database driver
      */
@@ -66,46 +80,64 @@ public class DataConfig {
      */
     @Value("${db.hibernate.hbm2ddl.auto}")
     private String propHibernateHbm2ddlAuto;
-
     /**
-     * The method сreate a new bean object data source
+     * The method create a new bean object data source
      *
      * @return DataSource
      */
     @Bean
     public DataSource dataSource() {
+        String message = messageSource.getMessage("begin", null, "locale not found", Locale.getDefault())
+                + " " + messageSource.getMessage("config.data.source", null, "locale not found", Locale.getDefault());
+        logger.info(message);
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(propDatabaseDriver);
         dataSource.setUrl(propDatabaseUrl);
         dataSource.setUsername(propDatabaseUserName);
         dataSource.setPassword(propDatabasePassword);
+
+        message = messageSource.getMessage("end", null, "locale not found", Locale.getDefault())
+                + " " + messageSource.getMessage("config.data.source", null, "locale not found", Locale.getDefault());
+        logger.info(message);
         return dataSource;
     }
 
     /**
-     * The method сreate a new bean object entity manager factory
+     * The method create a new bean object entity manager factory
      *
      * @return LocalContainerEntityManagerFactoryBean
      */
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        String message = messageSource.getMessage("begin", null, "locale not found", Locale.getDefault())
+                + " " + messageSource.getMessage("config.data.entity", null, "locale not found", Locale.getDefault());
+        logger.info(message);
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactoryBean.setDataSource(dataSource());
         entityManagerFactoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
         entityManagerFactoryBean.setPackagesToScan(propEntityManagerPackagesToScan);
         entityManagerFactoryBean.setJpaProperties(getHibernateProperties());
+        message = messageSource.getMessage("end", null, "locale not found", Locale.getDefault())
+                + " " + messageSource.getMessage("config.data.entity", null, "locale not found", Locale.getDefault());
+        logger.info(message);
         return entityManagerFactoryBean;
     }
 
     /**
-     * The method сreate a new bean object JPA transaction manager
+     * The method create a new bean object JPA transaction manager
      *
      * @return JpaTransactionManager
      */
     @Bean
     public JpaTransactionManager transactionManager() {
+        String message = messageSource.getMessage("begin", null, "locale not found", Locale.getDefault())
+                + " " + messageSource.getMessage("config.data.transaction", null, "locale not found", Locale.getDefault());
+        logger.info(message);
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
+        message = messageSource.getMessage("end", null, "locale not found", Locale.getDefault())
+                + " " + messageSource.getMessage("config.data.transaction", null, "locale not found", Locale.getDefault());
+        logger.info(message);
         return transactionManager;
     }
 
@@ -120,10 +152,16 @@ public class DataConfig {
     }
 
     private Properties getHibernateProperties() {
+        String message = messageSource.getMessage("begin", null, "locale not found", Locale.getDefault())
+                + " " + messageSource.getMessage("config.data.properties", null, "locale not found", Locale.getDefault());
+        logger.info(message);
         Properties properties = new Properties();
         properties.put("hibernate.dialect", propHibernateDialect);
         properties.put("hibernate.show_sql", propHibernateShowSql);
         properties.put("hibernate.format_sql", propHibernateHbm2ddlAuto);
+        message = messageSource.getMessage("end", null, "locale not found", Locale.getDefault())
+                + " " + messageSource.getMessage("config.data.properties", null, "locale not found", Locale.getDefault());
+        logger.info(message);
         return properties;
     }
 

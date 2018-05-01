@@ -6,49 +6,65 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The class entity to store information about Persons.
+ */
 @Entity
 @Table(name = "persons")
 public class Persons {
     /**
-     * property - of Person id
+     * property - of Persons id
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", columnDefinition = "serial")
     private Long id;
-
+    /**
+     * property - of Persons reference to Users
+     */
     @OneToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "user_id")
     private Users user;
     /**
-     * property - of Person First Name
+     * property - of Persons First Name
      */
     @Column(name = "first_name")
     private String firstName;
     /**
-     * property - of Person Last Name
+     * property - of Persons Last Name
      */
     @Column(name = "last_name")
     private String lastName;
     /**
-     * property - of Person Screen Name
+     * property - of Persons Screen Name
      */
     @Column(name = "screen_name")
     private String screenName;
     /**
-     * property - of Person Image
+     * property - of Persons Image
      */
     @Column(name = "image")
     private String image;
-
+    /**
+     * property - of Persons Comments list
+     */
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "person")
     private List<Comments> comments = new ArrayList<>();
-
+    /**
+     * Class constructor. Creates a new default object Persons
+     */
     public Persons(){
-
     }
-
+    /**
+     * Class constructor. Creates a new object Persons with the specified values
+     *
+     * @param user  - Persons user
+     * @param firstName  - Persons first name
+     * @param lastName  - Persons last name
+     * @param screenName  - Persons screen name
+     * @param image  - Persons image
+     */
     public Persons(Users user, String firstName, String lastName, String screenName, String image) {
         this.user = user;
         this.firstName = firstName;
@@ -103,6 +119,14 @@ public class Persons {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public List<Comments> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comments> comments) {
+        this.comments = comments;
     }
 
     @Override

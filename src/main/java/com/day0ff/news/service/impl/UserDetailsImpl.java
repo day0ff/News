@@ -13,12 +13,21 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * The class implements methods of the business logic entities of entity UserDetails that used in Authentication Manager.
+ */
 @Service(value = "userDetailsImpl")
 public class UserDetailsImpl implements UserDetailsService{
+    /**
+     * property - set UsersRepository bean
+     */
     @Autowired
     private UsersRepository usersRepository;
-
+    /**
+     * The method fetching User details from the database for validation by Spring Security.
+     *
+     * @return UserDetails objects
+     */
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
         Users users = usersRepository.findByUserName(userName);
         if (users == null) {
@@ -30,8 +39,12 @@ public class UserDetailsImpl implements UserDetailsService{
         return new org.springframework.security.core.userdetails.User(
                 users.getUserName(), users.getPassword(), getAuthority(users.getRoles()));
     }
-
-    private List getAuthority(List<Roles> roles) {
+    /**
+     * The method set Roles to Granted Authority list
+     *
+     * @return Granted Authority list objects
+     */
+    private List<GrantedAuthority> getAuthority(List<Roles> roles) {
         List<GrantedAuthority> grantedAuthoritiesList = new ArrayList<>();
         for (Roles role: roles) {
             grantedAuthoritiesList.add(new SimpleGrantedAuthority(role.getRole()));

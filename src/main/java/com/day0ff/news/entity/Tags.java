@@ -1,23 +1,35 @@
 package com.day0ff.news.entity;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * The class entity to store information about news Tags.
+ */
 @Entity
 @Table(name = "tags")
 public class Tags {
+    /**
+     * property - of Tags id
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", columnDefinition = "serial")
     private Long id;
-
+    /**
+     * property - of Tags tag
+     */
     @Column(name = "tag")
     private String tag;
-
+    /**
+     * Class constructor. Creates a new default object Tags
+     */
     public Tags() {
     }
-
+    /**
+     * Class constructor. Creates a new object Tags with the specified values
+     *
+     * @param tag  - Tags tag
+     */
     public Tags(String tag) {
         this.tag = tag;
     }
