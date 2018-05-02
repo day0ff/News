@@ -2,7 +2,6 @@ package com.day0ff.news.controller;
 
 import com.day0ff.news.config.NewsControllerTestConfig;
 import com.day0ff.news.entity.*;
-import com.day0ff.news.repository.NewsRepository;
 import com.day0ff.news.service.*;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,30 +11,22 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.context.MessageSourceResolvable;
-import org.springframework.context.NoSuchMessageException;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -76,9 +67,6 @@ public class NewsControllerTest {
     @Autowired
     private NewsController newsController;
 
-    @Autowired
-    private MessageSource messageSource;
-
     private Users user = new Users("ivan", "1234", true);
     private List<Users> usersList = new ArrayList<>();
 
@@ -88,7 +76,6 @@ public class NewsControllerTest {
     private List<Roles> rolesList = new ArrayList<>();
 
     private Persons person = new Persons(user, "Иван", "Иванов", "ivanushka", "image");
-    private List<Persons> personsList = new ArrayList<>();
 
     private News news = new News(person, "Заголовок", "Артикаль", "Статья", "Картинка", new Date(), 0, true);
     private List<News> newsList = new ArrayList<>();
@@ -104,13 +91,6 @@ public class NewsControllerTest {
 
     private Likes like = new Likes(news, person);
     private List<Likes> likesList = new ArrayList<>();
-
-
-    private static byte[] convertObjectToJsonBytes(Object object) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        return mapper.writeValueAsBytes(object);
-    }
 
     @Before
     public void setUp() {
@@ -149,12 +129,8 @@ public class NewsControllerTest {
         Mockito.when(newsService.fetchFindById(1L)).thenReturn(news);
         Mockito.when(newsService.fetchNewsCategoriesFindById(1L)).thenReturn(news);
         Mockito.when(newsService.findNewsByCategories("Test")).thenReturn(newsList);
-
-
         Mockito.when(commentsService.getCountNewsComments(1L)).thenReturn(1);
         Mockito.when(newsService.fetchNewsCountFindByPersonId(1L)).thenReturn(1);
-
-
         Mockito.when(commentsService.getCountPersonComments(1L)).thenReturn(1);
         Mockito.doNothing().when(newsService).incrementNewsViews(1L);
         Mockito.when(usersService.getCountUserByUserName("ivan")).thenReturn(1);
@@ -233,36 +209,6 @@ public class NewsControllerTest {
         Mockito.verifyNoMoreInteractions(likesService);
     }
 
-/*
-    @Test
-    public void getLikeByNewsAndPersonTest() throws Exception {
-        mockMvc.perform(get("/like/{newsId}/{personId}", 1L, 1L))
-                .andExpect(status().isOk());
-        Mockito.verify(likesService, times(1)).findByNewsAndPerson(1L, 1L);
-        Mockito.verifyNoMoreInteractions(likesService);
-    }
-
-    @Test
-    public void getNewsTest() throws Exception {
-        mockMvc.perform(get("/news"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(application_JSON_UTF8))
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].news.title", is("Заголовок")));
-        Mockito.verify(newsService, times(1)).findAll();
-        Mockito.verifyNoMoreInteractions(newsService);
-    }
-
-    @Test
-    public void getNewsByIdTest() throws Exception {
-        mockMvc.perform(get("/news/{newsId}", 1L))
-                .andExpect(status().isOk());
-        Mockito.verify(newsService, times(1)).findById(1L);
-        Mockito.verifyNoMoreInteractions(newsService);
-    }
-*/
-
     @Test
     public void getTagsTest() throws Exception {
         mockMvc.perform(get("/tags"))
@@ -295,30 +241,6 @@ public class NewsControllerTest {
         Mockito.verify(newsService, times(1)).fetchNewsCategoriesFindById(1L);
         Mockito.verifyNoMoreInteractions(newsService);
     }
-/*
-    @Test
-    public void getNewsCommentsCountTest() throws Exception {
-        mockMvc.perform(get("/news/comments/count/{id}", 1L))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(application_JSON_UTF8))
-                .andExpect(jsonPath("$", is(1)));
-        Mockito.verify(commentsService, times(1)).getCountNewsComments(1L);
-        Mockito.verifyNoMoreInteractions(commentsService);
-    }
-
-
-    @Test
-    public void getNewsByCategoryTest() throws Exception {
-        mockMvc.perform(get("/news/category/{category}", "Test"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(application_JSON_UTF8))
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].news.title", is("Заголовок")));
-        Mockito.verify(newsService, times(1)).findNewsByCategories("Тесты");
-        Mockito.verifyNoMoreInteractions(newsService);
-    }
-*/
 
     @Test
     public void getNewsPersonCountTest() throws Exception {
