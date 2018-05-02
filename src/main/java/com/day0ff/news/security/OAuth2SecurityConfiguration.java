@@ -23,7 +23,13 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import javax.annotation.Resource;
 import java.util.Locale;
 import java.util.Properties;
-
+/**
+ * The class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter and provides usual
+ * spring security configuration.
+ * Following configuration basically bootstraps the authorization server and resource server.
+ * @EnableWebSecurity : Enables spring security web security support.
+ * @EnableGlobalMethodSecurity: Support to have method level access control.
+ */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
@@ -37,11 +43,15 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
      */
     @Autowired
     private MessageSource messageSource;
-
-
-    @Resource(name = "userDetailsImpl")
+    /**
+     * property - set userDetailsService bean
+     */
+    @Autowired
     private UserDetailsService userDetailsService;
-
+    /**
+     * The method provides a convenient base class for creating a WebSecurityConfigurer instance.
+     * Delegate creation to authenticationBuilder.
+     */
     @Override
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -51,7 +61,9 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         return super.authenticationManagerBean();
     }
-
+    /**
+     * The method used for adding authenticating by userDetailsService to the  AuthenticationManager.
+     */
     @Autowired
     public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception {
         String message = messageSource.getMessage("begin", null, "locale not found", Locale.getDefault())
@@ -64,7 +76,10 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 + " " + messageSource.getMessage("security.authentication.manager.builder", null, "locale not found", Locale.getDefault());
         logger.info(message);
     }
-
+    /**
+     * The method configures the access rules and request matchers (path) for protected resources using
+     * the HttpSecurity class. Secure the URL paths.
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         String message = messageSource.getMessage("begin", null, "locale not found", Locale.getDefault())
@@ -81,7 +96,9 @@ public class OAuth2SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 + " " + messageSource.getMessage("security.http.security", null, "locale not found", Locale.getDefault());
         logger.info(message);
     }
-
+    /**
+     * The method defined the TokenStore bean to let Spring know to use the in memory token operations.
+     */
     @Bean
     public TokenStore tokenStore() {
         String message = messageSource.getMessage("beginEnd", null, "locale not found", Locale.getDefault())

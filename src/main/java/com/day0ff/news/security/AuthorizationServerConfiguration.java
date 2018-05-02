@@ -16,6 +16,12 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 
 import java.util.Locale;
 
+/**
+ * The class extends AuthorizationServerConfigurerAdapter and is responsible for generating tokens specific to a client.
+ * The class use in-memory credentials with client as "my-trusted-client" and client secret as "secret".
+ *
+ * @EnableAuthorizationServer: Enables an authorization server.
+ */
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
@@ -39,6 +45,10 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    /**
+     * The method register a client with client-id "my-trusted-client" and password "secret" and scope he is allowed for.
+     * Specifies that any generated access token will be valid for only 300 seconds
+     */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         String message = messageSource.getMessage("begin", null, "locale not found", Locale.getDefault())
@@ -48,15 +58,18 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
         clients.inMemory()
                 .withClient("my-trusted-client")
                 .authorizedGrantTypes("password")
-                .scopes("read","write","edit")
+                .scopes("read", "write", "edit")
                 .secret("secret")
-                .accessTokenValiditySeconds(120);
+                .accessTokenValiditySeconds(300);
 
         message = messageSource.getMessage("end", null, "locale not found", Locale.getDefault())
                 + " " + messageSource.getMessage("security.client.details.service", null, "locale not found", Locale.getDefault());
         logger.info(message);
     }
 
+    /**
+     * The method allow authentication for clients. Enabled two endpoints for checking tokens.
+     */
     @Override
     public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
         String message = messageSource.getMessage("begin", null, "locale not found", Locale.getDefault())
@@ -70,6 +83,10 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
         logger.info(message);
     }
 
+    /**
+     * The method configure AuthorizationServerEndpointsConfigurer defines the authorization and token endpoints
+     * and the token services.extends WebSecurityConfigurerAdapter and provides usual.
+     */
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         String message = messageSource.getMessage("begin", null, "locale not found", Locale.getDefault())

@@ -7,3 +7,12 @@ News.iml
 
 #webapp
 /src/main/webapp
+
+#angular ide
+/news/.idea
+
+#angular dist
+/news/dist
+
+#angular node_modules
+/news/node_modules

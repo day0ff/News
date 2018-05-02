@@ -32,9 +32,15 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
      */
     @Autowired
     private MessageSource messageSource;
-
+    /**
+     * property - of resource
+     */
     private static final String RESOURCE_ID = "my_rest_api";
 
+    /**
+     * The method overrode resource for "my_rest_api". stateless() flag indicate that only token-based authentication
+     * is allowed on these resources.
+     */
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) {
         String message = messageSource.getMessage("begin", null, "locale not found", Locale.getDefault())
@@ -48,6 +54,10 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
         logger.info(message);
     }
 
+    /**
+     * The method configures the access rules and request matchers (path) for protected resources using
+     * the HttpSecurity class. Secure the URL paths.
+     */
     @Override
     public void configure(HttpSecurity http) throws Exception {
         String message = messageSource.getMessage("begin", null, "locale not found", Locale.getDefault())

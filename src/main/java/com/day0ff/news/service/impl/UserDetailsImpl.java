@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * The class implements methods of the business logic entities of entity UserDetails that used in Authentication Manager.
  */
-@Service(value = "userDetailsImpl")
+@Service
 public class UserDetailsImpl implements UserDetailsService{
     /**
      * property - set UsersRepository bean
